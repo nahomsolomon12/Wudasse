@@ -1,49 +1,52 @@
+
+
+
+import {Link} from 'expo-router'
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StyleSheet, Text, View, Button, Image, ScrollView} from 'react-native';
 
-const Stack = createNativeStackNavigator();
 
+
+ 
     
-      function HomeScreen({ navigation }) {
-      return (
-        <View style={styles.container}>
-          <Text style={styles.text}>Home Screen</Text>
-          <Button title="Go to Details" onPress={() => navigation.navigate('Details')} />
-        </View>
-      );
-    }
-
-    function DetailsScreen({ navigation }) {
-      return (
-        <View style={styles.container}>
-          <Text style={styles.text}>Details Screen</Text>
-          <Button title="Go back" onPress={() => navigation.goBack()} />
-        </View>
-      );
-    }
-
+    
     export default function App() {
       return (
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Details" component={DetailsScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <ScrollView style={styles.container}>
+
+          <Text style = {styles.firstp}>This is my first attempt at Creating Wudasse Mariam Game App
+          ; I hope I do not fuck it up. Correction: I will NOT fuck it up ":)" </Text>
+          <Image source={require ("./images.jpeg")} style = {styles.image}></Image>
+          <Link href = {"/"} styles = {styles.button}>Go Back Home</Link>
+
+        </ScrollView>
+        
+       
       );
     }
 
     const styles = StyleSheet.create({
       container: {
-        flex: 1,
+        
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#fff',
       },
       text: {
         fontSize: 24,
-        marginBottom: 20,
+      
       },
+      firstp: {
+        fontSize: 20, 
+        padding: 20
+      },
+      button: {
+        fontSize: 20, 
+        textDecorationLine: 'underline', 
+      },
+    image: {
+      width: 200,
+      height: 200,
+      resizeMode: 'contain', // adjust the image scaling
+    },
     });

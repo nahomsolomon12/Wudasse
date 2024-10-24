@@ -1,7 +1,7 @@
 // import React from 'react';
 // import { StyleSheet, Text, View } from "react-native";
 // import TypeWriterEffect from 'react-native-typewriter-effect';
-
+import {Link} from 'expo-router'
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
@@ -37,6 +37,10 @@ const App = () => {
   return (
     <View style={styles.container}>
       <TypeWriter text="ዕውቀት ይስፋፋ ፤ ድንቁርና ይጥፋ!" speed={100} />
+
+      <Link href = {"/home"} style = {styles.button}>
+      Go Here
+      </Link>
     </View>
   );
 };
