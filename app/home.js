@@ -1,7 +1,9 @@
 
-import {Link} from 'expo-router'
-import { StatusBar } from 'expo-status-bar';
+
 import { StyleSheet, Text, View, Button, Image, ScrollView} from 'react-native';
+import React from 'react';
+import {Link} from 'expo-router'
+
 
 
 
@@ -14,7 +16,7 @@ import { StyleSheet, Text, View, Button, Image, ScrollView} from 'react-native';
 
           <Text style = {styles.firstp}>This is my first attempt at Creating Wudasse Mariam Game App </Text>
           <Image source={require ("./images.jpeg")} style = {styles.image}></Image>
-          <Link href = {"/"} styles = {styles.button}>Go Back Home</Link>
+          <Link href = {"app/index.js"} styles = {styles.button}>Go Back Home</Link>
 
         </View>
         

@@ -53,7 +53,7 @@ const Stack = createNativeStackNavigator();
 
 
 
-// Navigation Stack for Home and Profile Screens,, stack is for having multiple pages under the same guided app
+// 
 function HomeScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -78,6 +78,7 @@ function SettingsScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Settings Screen</Text>
+      
     </View>
   );
 }
