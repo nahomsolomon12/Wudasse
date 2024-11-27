@@ -1,18 +1,23 @@
-// import React from 'react';
-// import { StyleSheet, Text, View } from "react-native";
-// import TypeWriterEffect from 'react-native-typewriter-effect';
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {Link} from 'expo-router'
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Button} from 'react-native';
 
-const TypeWriter = ({ text, speed = 100, delay = 2000 }) => {
+
+
+// Type Writer Effect for when the app boots up 
+function TypeWriterEffect({ speed = 200, delay = 2500}) {
+  const fullText = 'ዕውቀት ይስፋፋ ድንቁርና ይጥፋ'
   const [displayedText, setDisplayedText] = useState('');
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (index < text.length) {
+    if (fullText && index < fullText.length) {
       const timeout = setTimeout(() => {
-        setDisplayedText((prev) => prev + text[index]);
+        setDisplayedText((prev) => prev + fullText[index]);
         setIndex(index + 1);
       }, speed);
       
@@ -25,7 +30,7 @@ const TypeWriter = ({ text, speed = 100, delay = 2000 }) => {
       }, delay); // Delay before restarting the effect
       return () => clearTimeout(resetTimeout);
     }
-  }, [index, text, speed, delay]);
+  }, [index, fullText, speed, delay]);
 
   return (
     <Text style={styles.text}>
@@ -33,18 +38,81 @@ const TypeWriter = ({ text, speed = 100, delay = 2000 }) => {
     </Text>
   );
 };
-const App = () => {
-  return (
-    <View style={styles.container}>
-      <TypeWriter text="ዕውቀት ይስፋፋ ፤ ድንቁርና ይጥፋ!" speed={100} />
 
-      <Link href = {"/home"} style = {styles.button}>
-      Go Here
-      </Link>
+
+
+
+
+
+
+
+// Navigation Code
+
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+
+
+// Navigation Stack for Home and Profile Screens,, stack is for having multiple pages under the same guided app
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      
+
+      <TypeWriterEffect></TypeWriterEffect>
+          <Link style = {{padding:50}} href = {"app/home.js"}>Go to your First Page</Link>
     </View>
+  );
+}
+
+
+function ProfileScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Profile Screen</Text>
+    </View>
+  );
+}
+
+function SettingsScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings Screen</Text>
+    </View>
+  );
+}
+
+
+
+
+
+// Main Page 
+
+const App = () => {
+  return (   
+    
+    
+    <NavigationContainer independent = {true}>
+
+      
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Profile" component={ProfileScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
+        
+      </Tab.Navigator>
+    
+      
+    </NavigationContainer>
+      
+
+    
+    
   );
 };
 
+
+// Visual/Aesthetics 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -60,41 +128,3 @@ const styles = StyleSheet.create({
 
 export default App;
 
-
-// 
-// export default function Page() {
-//   return (
-//     <View style={styles.container} >
-//       <View style={styles.main}>
-//           
-//      
-//         <Text style={styles.subtitle}>ዕውቀት ይስፋፋ ፤ ድንቁርና ይጥፋ! </Text>
-//       </View>
-//     </View>
-//   );
-// }
-// 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: "center",
-//     padding: 24,
-//   },
-//   main: {
-//     flex: 1,
-//     justifyContent: "center",
-//     maxWidth: 960,
-//     marginHorizontal: "auto",
-//   },
-//   title: {
-//     fontSize: 64,
-//     fontWeight: "bold",
-//   },
-//   subtitle: {
-//     fontSize: 36,
-//     color: "#38434D",
-//   },
-// });
-// 
-// 
-// 

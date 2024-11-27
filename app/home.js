@@ -1,6 +1,4 @@
 
-
-
 import {Link} from 'expo-router'
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, Image, ScrollView} from 'react-native';
@@ -12,14 +10,13 @@ import { StyleSheet, Text, View, Button, Image, ScrollView} from 'react-native';
     
     export default function App() {
       return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
 
-          <Text style = {styles.firstp}>This is my first attempt at Creating Wudasse Mariam Game App
-          ; I hope I do not fuck it up. Correction: I will NOT fuck it up ":)" </Text>
+          <Text style = {styles.firstp}>This is my first attempt at Creating Wudasse Mariam Game App </Text>
           <Image source={require ("./images.jpeg")} style = {styles.image}></Image>
           <Link href = {"/"} styles = {styles.button}>Go Back Home</Link>
 
-        </ScrollView>
+        </View>
         
        
       );
