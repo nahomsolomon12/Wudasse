@@ -1,119 +1,89 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {Link} from 'expo-router'
-import { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button} from 'react-native';
+import { Button } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 
-
-
-// Type Writer Effect for when the app boots up 
-function TypeWriterEffect({ speed = 200, delay = 2500}) {
-  const fullText = 'ዕውቀት ይስፋፋ ድንቁርና ይጥፋ'
+// Type Writer Effect for when the app boots up
+function TypeWriterEffect({ speed = 200, delay = 2500 }) {
+  const fullText = 'ዕውቀት ይስፋፋ ድንቁርና ይጥፋ';
   const [displayedText, setDisplayedText] = useState('');
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (fullText && index < fullText.length) {
+    if (index < fullText.length) {
       const timeout = setTimeout(() => {
         setDisplayedText((prev) => prev + fullText[index]);
         setIndex(index + 1);
       }, speed);
-      
-      return () => clearTimeout(timeout); // Cleanup timeout
+      return () => clearTimeout(timeout);
     } else {
-      // If text is fully typed, wait for the specified delay and restart
       const resetTimeout = setTimeout(() => {
         setDisplayedText('');
         setIndex(0);
-      }, delay); // Delay before restarting the effect
+      }, delay);
       return () => clearTimeout(resetTimeout);
     }
   }, [index, fullText, speed, delay]);
 
+  return <Text style={styles.text}>{displayedText}</Text>;
+}
+
+// Home Screen Component
+function HomeScreen({ navigation }) {
   return (
-    <Text style={styles.text}>
-      {displayedText}
-    </Text>
+    <View style={styles.container}>
+      <TypeWriterEffect />
+      <Text style = {styles.text}>Welcome to Wudase!</Text>
+      <Button title="Sign In" onPress={() => navigation.navigate('Sign In')} />
+      <Button title="Sign Up" onPress={() => navigation.navigate('Sign Up')} />
+      <Button title="Go to Details" onPress={() => navigation.navigate('Details')} />
+    </View>
   );
-};
+}
 
+// Details Screen Component
+function DetailsScreen() {
+  return (
+    <View style={styles.container}>
+      <Text>Details Screen</Text>
+    </View>
+  );
+}
 
+function SignInScreen() {
+  return (
+    <View style={styles.container}>
+      <Text>Click Here</Text>
+    </View>
+  );
+}
 
+function SignUpScreen() {
+  return (
+    <View style={styles.container}>
+      <Text>Click There</Text>
+    </View>
+  );
+}
 
-
-
-
-
-// Navigation Code
-
-const Tab = createBottomTabNavigator();
+// Stack Navigator Setup
 const Stack = createNativeStackNavigator();
 
-
-
-// 
-function HomeScreen() {
+export default function App() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      
-
-      <TypeWriterEffect></TypeWriterEffect>
-          <Link style = {{padding:50}} href = {"app/home.js"}>Go to your First Page</Link>
-    </View>
-  );
-}
-
-
-function ProfileScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Profile Screen</Text>
-    </View>
-  );
-}
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings Screen</Text>
-      
-    </View>
-  );
-}
-
-
-
-
-
-// Main Page 
-
-const App = () => {
-  return (   
-    
-    
-    <NavigationContainer independent = {true}>
-
-      
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-        
-      </Tab.Navigator>
-    
-      
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="Details" component={DetailsScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
-      
-
-    
-    
   );
-};
+}
 
-
-// Visual/Aesthetics 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -122,10 +92,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   text: {
-    fontSize: 24,
-    color: '#000',
+    fontSize: 80,
+    fontFamily: 'AbyssinicaSIL-Regular'
   },
 });
-
-export default App;
-
