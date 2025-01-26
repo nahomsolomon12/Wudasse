@@ -1,98 +1,111 @@
-import React, { useState, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Button } from 'react-native';
-import { View, Text, StyleSheet } from 'react-native';
+// Import necessary modules from React and Expo
+import React, { useState } from 'react';
+import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 
-// Type Writer Effect for when the app boots up
-function TypeWriterEffect({ speed = 200, delay = 2500 }) {
-  const fullText = 'ዕውቀት ይስፋፋ ድንቁርና ይጥፋ';
-  const [displayedText, setDisplayedText] = useState('');
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    if (index < fullText.length) {
-      const timeout = setTimeout(() => {
-        setDisplayedText((prev) => prev + fullText[index]);
-        setIndex(index + 1);
-      }, speed);
-      return () => clearTimeout(timeout);
-    } else {
-      const resetTimeout = setTimeout(() => {
-        setDisplayedText('');
-        setIndex(0);
-      }, delay);
-      return () => clearTimeout(resetTimeout);
-    }
-  }, [index, fullText, speed, delay]);
-
-  return <Text style={styles.text}>{displayedText}</Text>;
-}
-
-// Home Screen Component
-function HomeScreen({ navigation }) {
-  return (
-    <View style={styles.container}>
-      <TypeWriterEffect />
-      <Text style = {styles.text}>Welcome to Wudase!</Text>
-      <Button title="Sign In" onPress={() => navigation.navigate('Sign In')} />
-      <Button title="Sign Up" onPress={() => navigation.navigate('Sign Up')} />
-      <Button title="Go to Details" onPress={() => navigation.navigate('Details')} />
-    </View>
-  );
-}
-
-// Details Screen Component
-function DetailsScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>Details Screen</Text>
-    </View>
-  );
-}
-
-function SignInScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>Click Here</Text>
-    </View>
-  );
-}
-
-function SignUpScreen() {
-  return (
-    <View style={styles.container}>
-      <Text>Click There</Text>
-    </View>
-  );
-}
-
-// Stack Navigator Setup
-const Stack = createNativeStackNavigator();
+// Quiz data
+const quizData = [
+  {
+    question: 'ታቦት በወርቅ ልቡጥ እምኵለሄ ዘግቡር እምዕፅ ______________ ይትሜሰል ለነ ዘእግዚአብሔር ቃለ...',
+    options: ['ጳጦስ', 'ሕይወት', 'ዘኢይነቅዝ', 'ገዳም'],
+    answer: 'ዘኢይነቅዝ',
+  },
+  {
+    question: 'ዘኮነ ሰብአ ዘእንበለ ______________ ፡ መለኮት ንጹሕ ዘአልቦ ሙስና ዘዕሩይ ምስለ አብ... ', 
+    options: ['ሰላም ወሱባኤ', 'ፍልጠት ወኢውላጤ', 'ርስሐት ወርኩስ', 'ሥጋ ወነፍስ'],
+    answer: 'ፍልጠት ወኢውላጤ',
+  },
+  {
+    question: 'ወቦቱ አብሠራ ለንጽሕት ዘእንበለ ዘርዕ ኮነ ከማነ በኪነ ጥበቡ ቅዱስ፡ ዘተሰብአ እምኔኪ ዘእንበለ ርኵስ፡ ______________ መለኮቶ ሰአሊ ለነ ቅድስት።',
+    options: ['ደመረ', 'ተደመረ', 'ተጻምረ', 'ተዋሐደ'],
+    answer: 'ደመረ',
+  },
+];
 
 export default function App() {
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
+  const [isQuizFinished, setIsQuizFinished] = useState(false);
+
+  const handleAnswerPress = (selectedOption) => {
+    if (selectedOption === quizData[currentQuestion].answer) {
+      setScore(score + 1);
+    }
+
+    if (currentQuestion + 1 < quizData.length) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setIsQuizFinished(true);
+    }
+  };
+
+  const resetQuiz = () => {
+    setCurrentQuestion(0);
+    setScore(0);
+    setIsQuizFinished(false);
+  };
+
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={styles.container}>
+      <StatusBar style="auto" />
+      {isQuizFinished ? (
+        <View style={styles.resultContainer}>
+          <Text style={styles.resultText}>Your Score: {score} / {quizData.length}</Text>
+          <Button title="Restart Quiz" onPress={resetQuiz} />
+          
+        </View>
+      ) : (
+        <View style={styles.quizContainer}>
+          <Text style={styles.questionText}>{quizData[currentQuestion].question}</Text>
+          {quizData[currentQuestion].options.map((option, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.optionButton}
+              onPress={() => handleAnswerPress(option)}
+            >
+              <Text style={styles.optionText}>{option}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+    </View>
   );
 }
 
-// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f5f5',
+    padding: 16,
   },
-  text: {
-    fontSize: 80,
-    fontFamily: 'AbyssinicaSIL-Regular'
+  quizContainer: {
+    width: '100%',
+  },
+  questionText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  optionButton: {
+    backgroundColor: '#6200ea',
+    padding: 15,
+    borderRadius: 8,
+    marginVertical: 8,
+  },
+  optionText: {
+    color: '#ffffff',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  resultContainer: {
+    alignItems: 'center',
+  },
+  resultText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });
