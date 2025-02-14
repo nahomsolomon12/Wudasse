@@ -1,77 +1,101 @@
-import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, ImageBackground } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, Button, StyleSheet, ImageBackground, Animated, Image } from 'react-native';
+
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState('home');
 
   return (
+    
+    // Blue Background
     <ImageBackground 
-      source={require('./cloud.jpeg')}
+      source={require("./cloud.jpeg")} 
       style={styles.background}
     >
       <View style={styles.container}>
-        {currentScreen === 'home' && <HomeScreen goToScreen={setCurrentScreen} />}
-        {currentScreen === 'profile' && <ProfileScreen goToScreen={setCurrentScreen} />}
-        {currentScreen === 'settings' && <SettingsScreen goToScreen={setCurrentScreen} />}
+        <RisingImage />
+        <TypeWriterEffect />
+
+        <Button style = {styles.button} title="Play" onPress={() => alert("No Player Profile")}/>
+        
       </View>
     </ImageBackground>
   );
 }
 
-// Home Screen
-function HomeScreen({ goToScreen }) {
+
+// TypeWriter
+
+function TypeWriterEffect({ speed = 200, delay = 1500 }) {
+  const fullText = 'Welcome to Wudase';
+  const [displayedText, setDisplayedText] = useState('');
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (index < fullText.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText((prev) => prev + fullText[index]);
+        setIndex(index + 1);
+      }, speed);
+      return () => clearTimeout(timeout);
+    } else {
+      const resetTimeout = setTimeout(() => {
+        setDisplayedText('');
+        setIndex(0);
+      }, delay);
+      return () => clearTimeout(resetTimeout);
+    }
+  }, [index, fullText, speed, delay]);
+
+  return <Text style={styles.typewriter}>{displayedText}</Text>;
+}
+
+
+// Rising Image Component
+function RisingImage() {
+  const riseAnim = new Animated.Value(500); // Start off-screen (500px below)
+
+  useEffect(() => {
+    Animated.timing(riseAnim, {
+      toValue: 1, // Move to this position (higher up)
+      duration: 2000, // 2 seconds
+      useNativeDriver: true,
+    }).start();
+  }, []);
+
   return (
-    <View style={styles.page}>
-      <Text style={styles.text}>🏠 Home Screen</Text>
-      <Button title="Go to Profile" onPress={() => goToScreen('profile')} />
-      <Button title="Go to Settings" onPress={() => goToScreen('settings')} />
-    </View>
+    <Animated.Image
+      source={require("./vmdirect.jpg")} // Replace with your image
+      style={[styles.animatedImage, { transform: [{ translateY: riseAnim }] }]}
+    />
   );
 }
 
-// Profile Screen
-function ProfileScreen({ goToScreen }) {
-  return (
-    <View style={styles.page}>
-      <Text style={styles.text}>👤 Profile Screen</Text>
-      <Button title="Go to Home" onPress={() => goToScreen('home')} />
-      <Button title="Go to Settings" onPress={() => goToScreen('settings')} />
-    </View>
-  );
-}
 
-// Settings Screen
-function SettingsScreen({ goToScreen }) {
-  return (
-    <View style={styles.page}>
-      <Text style={styles.text}>⚙️ Settings Screen</Text>
-      <Button title="Go to Home" onPress={() => goToScreen('home')} />
-      <Button title="Go to Profile" onPress={() => goToScreen('profile')} />
-    </View>
-  );
-}
 
 // Styles
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: 'cover', // Ensures the image covers the whole screen
+    resizeMode: 'cover', // Covers the whole screen
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  page: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Semi-transparent background for better readability
-    padding: 20,
-    borderRadius: 10,
+  animatedImage: {
+    width: 400, // Adjust size
+    height: 400,
+    position: 'absolute', // Ensures it's not inside another view
   },
   text: {
     fontSize: 24,
     marginBottom: 20,
   },
+  typewriter: {
+    fontFamily: "Times New Roman",
+    fontSize: 100
+  }
 });
 
