@@ -1,7 +1,2 @@
-module.exports = function(api) {
-  api.cache(true);
-  return {
-    presets: ['babel-preset-expo'],
-  
-  };
-};
+export const presets = ['babel-preset-expo'];
+export const plugins = ['expo-router/babel'];

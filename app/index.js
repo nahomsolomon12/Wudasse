@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, ImageBackground, Animated, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-
-export default function App() {
-  const [currentScreen, setCurrentScreen] = useState('home');
+export default function Index() {
+  const navigation = useNavigation();
 
   return (
-    
     // Blue Background
     <ImageBackground 
       source={require("./cloud.jpeg")} 
@@ -16,15 +15,15 @@ export default function App() {
         <RisingImage />
         <TypeWriterEffect />
 
-        <Button style = {styles.button} title="Play" onPress={() => alert("No Player Profile")}/>
+        <Button title="Start Quiz" onPress={() => navigation.navigate('Quiz')} />
         
       </View>
-    </ImageBackground>
-  );
-}
+    </ImageBackground> );
+    
+  }
 
 
-// TypeWriter
+// TypeWriter Effect
 
 function TypeWriterEffect({ speed = 200, delay = 1500 }) {
   const fullText = 'Welcome to Wudase';
@@ -32,36 +31,35 @@ function TypeWriterEffect({ speed = 200, delay = 1500 }) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
+    let timeout;
     if (index < fullText.length) {
-      const timeout = setTimeout(() => {
+      timeout = setTimeout(() => {
         setDisplayedText((prev) => prev + fullText[index]);
         setIndex(index + 1);
       }, speed);
-      return () => clearTimeout(timeout);
     } else {
-      const resetTimeout = setTimeout(() => {
+      timeout = setTimeout(() => {
         setDisplayedText('');
         setIndex(0);
       }, delay);
-      return () => clearTimeout(resetTimeout);
     }
-  }, [index, fullText, speed, delay]);
-
-  return <Text style={styles.typewriter}>{displayedText}</Text>;
+    return () => clearTimeout(timeout);
+  }, [index]);
+  
 }
 
 
 // Rising Image Component
 function RisingImage() {
-  const riseAnim = new Animated.Value(500); // Start off-screen (500px below)
+  const riseAnim = useRef(new Animated.Value(500)).current; // useRef to persist value
+useEffect(() => {
+  Animated.timing(riseAnim, {
+    toValue: 0, // Moves up to the correct position
+    duration: 3000,
+    useNativeDriver: true,
+  }).start();
+}, []);
 
-  useEffect(() => {
-    Animated.timing(riseAnim, {
-      toValue: 1, // Move to this position (higher up)
-      duration: 2000, // 2 seconds
-      useNativeDriver: true,
-    }).start();
-  }, []);
 
   return (
     <Animated.Image
@@ -87,7 +85,7 @@ const styles = StyleSheet.create({
   animatedImage: {
     width: 400, // Adjust size
     height: 400,
-    position: 'absolute', // Ensures it's not inside another view
+    position: 'top', // Ensures it's not inside another view
   },
   text: {
     fontSize: 24,
@@ -95,7 +93,7 @@ const styles = StyleSheet.create({
   },
   typewriter: {
     fontFamily: "Times New Roman",
-    fontSize: 100
+    fontSize: 30
   }
 });
 
