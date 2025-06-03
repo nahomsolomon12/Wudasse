@@ -1,11 +1,13 @@
 import { Link } from 'expo-router';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 
 function AboutScreen() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>About Wudasse</Text>
-    </View>
+    <ImageBackground source={require('../assets/abba-george.jpeg')} resizeMode='cover' style={styles.background}>
+      <View style={styles.container}>
+        <Text style={styles.text}>About Wudasse</Text>
+      </View>
+    </ImageBackground>
 
   );
 }
@@ -15,12 +17,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignContent: 'center',
-    backgroundColor: "#25292e"
+    backgroundColor: 'rgba(0,0,0,0.4)'
   },
   text: {
     textAlign: 'center',
     fontSize: 20,
     color: "#ffff"
+  },
+
+  background: {
+    width: '100%',
+    height: '100%'
   }
 })
 

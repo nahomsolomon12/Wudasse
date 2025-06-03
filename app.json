@@ -2,7 +2,6 @@
   "expo": {
     "name": "Wudasse",
     "slug": "Wudasse",
-    
     "scheme": "Wudasse",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -28,7 +27,8 @@
     },
     "newArchEnabled": true,
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-font"
     ]
   }
 }
