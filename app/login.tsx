@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'expo-router';
 import {
     View, Text, StyleSheet, TextInput,
-    TouchableOpacity, ImageBackground, Linking
+    TouchableOpacity, ImageBackground, Linking,
+    ScrollView
 } from 'react-native';
 
 
@@ -10,54 +11,60 @@ import {
 
 
 function LoginScreen() {
-    const [email, setEmail] = useState('');
+    const [username, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
-    function handleLogin() {
-        console.log('Logging in with:', email, password);
+    async function handleLogin() {
+        console.log('Logging in with:', username, password);
         // Add API call or navigation here
+        const response = await fetch("http://localhost:8080/login", {
+            method: "POST",
+            body: (username),
+            
+        });
+        
     };
     function handleSignup() {
-        Linking.openURL('https://www.google.com');
+        Linking.openURL('mailto:nahomsolomon6@gmail.com?subject=Wudasse%20New%20Account%20Creation&body=Name%3A%20%0AEmail%3A%0APhone-Number%3A%20%0AEthiopian%20Orthodox%20Jurisdiction%3A%20');
     };
 
     return (
+        <ScrollView>
+            <ImageBackground
+                source={require('../assets/HolyVirgin.jpg')} // or require('./path/to/image.jpg')
+                style={styles.background}
+                resizeMode="cover"
+            >
+                <View style={styles.container}>
+                    <Text style={styles.title}>Login</Text>
 
-        <ImageBackground
-            source={require('../assets/HolyVirgin.jpg')} // or require('./path/to/image.jpg')
-            style={styles.background}
-            resizeMode="cover"
-        >
-            <View style={styles.container}>
-                <Text style={styles.title}>Login</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Email"
+                        placeholderTextColor="#ccc"
+                        onChangeText={setUserName}
+                        value={username}
+                        keyboardType="email-address"
+                    />
 
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    placeholderTextColor="#ccc"
-                    onChangeText={setEmail}
-                    value={email}
-                    keyboardType="email-address"
-                />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Password"
+                        placeholderTextColor="#ccc"
+                        onChangeText={setPassword}
+                        value={password}
+                        secureTextEntry
+                    />
 
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    placeholderTextColor="#ccc"
-                    onChangeText={setPassword}
-                    value={password}
-                    secureTextEntry
-                />
-
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Log In</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.signup} onPress={handleSignup}>
-                    <Text style={styles.buttonText}>Sign Up</Text>
-                </TouchableOpacity>
-            </View>
-        </ImageBackground>
-
+                    <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                        <Text style={styles.buttonText}>Log In</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.signup} onPress={handleSignup}>
+                        <Text style={styles.buttonText}>Sign Up</Text>
+                    </TouchableOpacity>
+                </View>
+            </ImageBackground>
+        </ScrollView>
     );
 }
 
