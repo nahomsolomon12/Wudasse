@@ -11,15 +11,10 @@ import { useRouter } from 'expo-router';
 
 
 
-function HomeScreen() {
+function dashboard() {
     const router = useRouter();
 
-    const handleLogin = () => {
-        router.push('/login');
-    }
-    const goAbout = () => {
-        router.push('/about');
-    }
+
 
     return (
         <ImageBackground
@@ -46,7 +41,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-around',
         alignContent: 'space-around',
-
+        backgroundColor: 'rgba(0,0,0,0.4)',
     },
     text: {
         textAlign: 'center',
@@ -74,4 +69,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default HomeScreen;
+export default dashboard;
