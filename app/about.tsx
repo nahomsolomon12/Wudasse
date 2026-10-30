@@ -1,42 +1,66 @@
 import { Link } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function AboutScreen() {
+  const { width } = useWindowDimensions();
+  const isWideScreen = width >= 700;
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.eyebrow}>ABOUT THE GAME</Text>
-        <Text style={styles.title}>A meaningful way to learn.</Text>
-        <Text style={styles.intro}>
-          Wudasse Mariam brings reflection and play together in a welcoming card game experience.
-        </Text>
-      </View>
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>What you can expect</Text>
-        <Text style={styles.cardText}>
-          Discover reminders for playing the game, learn what each section means, and keep the
-          experience easy to revisit.
-        </Text>
-      </View>
-      <Link href="/" asChild>
-        <Pressable style={styles.button}>
-          <Text style={styles.buttonText}>Back to home</Text>
-        </Pressable>
-      </Link>
-    </ScrollView>
+    <SafeAreaView style={styles.safeArea} edges={['bottom']}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={[styles.content, isWideScreen && styles.wideContent]}>
+          <View style={styles.header}>
+            <Text style={styles.eyebrow}>ABOUT THE GAME</Text>
+            <Text style={[styles.title, isWideScreen && styles.wideTitle]}>
+              A meaningful way to learn.
+            </Text>
+            <Text style={styles.intro}>
+              Wudasse Mariam brings reflection and play together in a welcoming card game experience.
+            </Text>
+          </View>
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>What you can expect</Text>
+            <Text style={styles.cardText}>
+              Discover reminders for playing the game, learn what each section means, and keep the
+              experience easy to revisit.
+            </Text>
+          </View>
+          <Link href="/" asChild>
+            <Pressable style={styles.button}>
+              <Text style={styles.buttonText}>Back to home</Text>
+            </Pressable>
+          </Link>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
     backgroundColor: '#f4f8f7',
-    padding: 24,
-    paddingBottom: 40,
+  },
+  container: {
+    flexGrow: 1,
+    backgroundColor: '#f4f8f7',
+    paddingHorizontal: 20,
+    paddingVertical: 24,
+  },
+  content: {
+    alignSelf: 'center',
+    maxWidth: 720,
+    width: '100%',
+    paddingHorizontal: 4,
+    paddingBottom: 16,
+  },
+  wideContent: {
+    paddingHorizontal: 36,
   },
   header: {
-    paddingTop: 24,
-    paddingBottom: 28,
+    paddingTop: 8,
+    paddingBottom: 24,
   },
   eyebrow: {
     color: '#137184',
@@ -50,6 +74,11 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: '800',
     lineHeight: 43,
+  },
+  wideTitle: {
+    fontSize: 52,
+    lineHeight: 60,
+    maxWidth: 620,
   },
   intro: {
     color: '#526b72',

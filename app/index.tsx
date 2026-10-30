@@ -1,7 +1,11 @@
 import { Link } from 'expo-router';
-import { Image, ImageBackground, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, ImageBackground, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function HomeScreen() {
+  const { width } = useWindowDimensions();
+  const isWideScreen = width >= 700;
+
   return (
     <ImageBackground
       source={require('../assets/background-image.png')}
@@ -9,19 +13,23 @@ function HomeScreen() {
       imageStyle={styles.backgroundImage}
     >
       <View style={styles.overlay} />
-      <View style={styles.content}>
-        <Image source={require('../assets/icon.png')} style={styles.logo} />
-        <Text style={styles.eyebrow}>WUDASSE MARIAM</Text>
-        <Text style={styles.title}>Learn, play, and remember.</Text>
-        <Text style={styles.subtitle}>
-          Explore the stories and meaning behind the Wudase Mariam prayer through a simple card game.
-        </Text>
-        <Link href="/about" asChild>
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Learn more</Text>
-          </Pressable>
-        </Link>
-      </View>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={[styles.content, isWideScreen && styles.wideContent]}>
+          <Image source={require('../assets/icon.png')} style={styles.logo} />
+          <Text style={styles.eyebrow}>WUDASSE MARIAM</Text>
+          <Text style={[styles.title, isWideScreen && styles.wideTitle]}>
+            Learn, play, and remember.
+          </Text>
+          <Text style={styles.subtitle}>
+            Explore the stories and meaning behind the Wudase Mariam prayer through a simple card game.
+          </Text>
+          <Link href="/about" asChild>
+            <Pressable style={styles.button}>
+              <Text style={styles.buttonText}>Learn more</Text>
+            </Pressable>
+          </Link>
+        </View>
+      </SafeAreaView>
     </ImageBackground>
   );
 }
@@ -39,9 +47,21 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(5, 28, 36, 0.58)',
   },
+  safeArea: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
   content: {
+    alignSelf: 'center',
+    maxWidth: 620,
+    width: '100%',
     padding: 28,
     paddingBottom: 44,
+  },
+  wideContent: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: 56,
+    paddingBottom: 64,
   },
   logo: {
     width: 64,
@@ -62,6 +82,11 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     lineHeight: 48,
     maxWidth: 420,
+  },
+  wideTitle: {
+    fontSize: 56,
+    lineHeight: 62,
+    maxWidth: 560,
   },
   subtitle: {
     color: '#e2eff1',
