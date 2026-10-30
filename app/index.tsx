@@ -1,20 +1,23 @@
 import { Link } from 'expo-router';
-import { Image, ImageBackground, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { BottomNav } from '../components/BottomNav';
 
 function HomeScreen() {
   const { width } = useWindowDimensions();
   const isWideScreen = width >= 700;
+  const isPhone = width <= 430;
 
   return (
-    <ImageBackground
-      source={require('../assets/background-image.png')}
-      style={styles.container}
-      imageStyle={styles.backgroundImage}
-    >
+    <View style={styles.container}>
+      <Image
+        source={require('../assets/background-image.png')}
+        style={styles.backgroundImage}
+        resizeMode="cover"
+      />
       <View style={styles.overlay} />
       <SafeAreaView style={styles.safeArea}>
-        <View style={[styles.content, isWideScreen && styles.wideContent]}>
+        <View style={[styles.content, isPhone && styles.phoneContent, isWideScreen && styles.wideContent]}>
           <Image source={require('../assets/icon.png')} style={styles.logo} />
           <Text style={styles.eyebrow}>WUDASSE MARIAM</Text>
           <Text style={[styles.title, isWideScreen && styles.wideTitle]}>
@@ -30,7 +33,8 @@ function HomeScreen() {
           </Link>
         </View>
       </SafeAreaView>
-    </ImageBackground>
+      <BottomNav />
+    </View>
   );
 }
 
@@ -41,6 +45,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#0d3d4a',
   },
   backgroundImage: {
+    ...StyleSheet.absoluteFillObject,
+    height: '100%',
+    width: '100%',
     opacity: 0.9,
   },
   overlay: {
@@ -57,6 +64,9 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 28,
     paddingBottom: 44,
+  },
+  phoneContent: {
+    paddingBottom: 124,
   },
   wideContent: {
     alignSelf: 'flex-start',

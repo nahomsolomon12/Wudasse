@@ -1,15 +1,17 @@
 import { Link } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { BottomNav } from '../components/BottomNav';
 
 function AboutScreen() {
   const { width } = useWindowDimensions();
   const isWideScreen = width >= 700;
+  const isPhone = width <= 430;
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['bottom']}>
       <ScrollView contentContainerStyle={styles.container}>
-        <View style={[styles.content, isWideScreen && styles.wideContent]}>
+        <View style={[styles.content, isPhone && styles.phoneContent, isWideScreen && styles.wideContent]}>
           <View style={styles.header}>
             <Text style={styles.eyebrow}>ABOUT THE GAME</Text>
             <Text style={[styles.title, isWideScreen && styles.wideTitle]}>
@@ -33,6 +35,7 @@ function AboutScreen() {
           </Link>
         </View>
       </ScrollView>
+      <BottomNav />
     </SafeAreaView>
   );
 }
@@ -54,6 +57,9 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 4,
     paddingBottom: 16,
+  },
+  phoneContent: {
+    paddingBottom: 124,
   },
   wideContent: {
     paddingHorizontal: 36,
